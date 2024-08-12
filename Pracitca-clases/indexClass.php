@@ -25,6 +25,12 @@ class Contacto
         return "El nomnre del tipo es: ". $this->nombre . " y tenes que mandarle un mail a la siguiente casilla: " . $this->email;
     } 
 
+    public function esEmailValido(): bool
+    {
+        return filter_var($this->email, FILTER_VALIDATE_EMAIL) !== false;
+    }
+
+
 }
 
 $contactoNuevo = new Contacto("tobias", "1234567890", "stanislavskytobias@gmail.com");
@@ -32,3 +38,5 @@ $contactoNuevo1 = new Contacto("fernando", "098765431", "fernando@gmail.com");
 
 echo $contactoNuevo->getMetodoNuevo() . "<br>";
 echo $contactoNuevo1->getInformacion() . "<br>";
+
+echo $contactoNuevo->esEmailValido() . "<br>";
