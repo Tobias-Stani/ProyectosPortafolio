@@ -213,6 +213,16 @@
                         <a href="/mas-proyectos/index.php" class="btn">Ingresar</a>
                     </div>
                 </article>
+
+                <!-- Card 5 -->
+                <article class="card">
+                    <img src="ruta/a/imagen-proyecto4.jpg" class="card-img-top" alt="Proyecto 5">
+                    <div class="card-body">
+                        <h5 class="card-title">Generador de qr</h5>
+                        <p class="card-text">Una breve descripción de este proyecto. Explica brevemente qué hace y por qué es interesante.</p>
+                        <a href="/libraries/barcode-1.1.1/index.php" class="btn">Ingresar</a>
+                    </div>
+                </article>
             </div>
 
             <!-- Timeline -->
