@@ -190,7 +190,7 @@
                     <div class="card-body">
                         <h5 class="card-title">EventJournal</h5>
                         <p class="card-text">Una breve descripción de este proyecto. Explica brevemente qué hace y por qué es interesante.</p>
-                        <a href="https://github.com/Tobias-Stani/EventJournal" class="btn">Ingresar</a>
+                        <a href="/otro-proyecto/index.php" class="btn">Ingresar</a>
                     </div>
                 </article>
 
@@ -200,7 +200,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Bot telegram con Jira</h5>
                         <p class="card-text">Una breve descripción de este proyecto. Explica brevemente qué hace y por qué es interesante.</p>
-                        <a href="https://github.com/Tobias-Stani/TelegramBotNotifier" class="btn">Ingresar</a>
+                        <a href="/mas-proyectos/index.php" class="btn">Ingresar</a>
                     </div>
                 </article>
 
@@ -210,7 +210,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Simon say</h5>
                         <p class="card-text">Una breve descripción de este proyecto. Explica brevemente qué hace y por qué es interesante.</p>
-                        <a href="https://github.com/Tobias-Stani/simon-say-dcoker" class="btn">Ingresar</a>
+                        <a href="/mas-proyectos/index.php" class="btn">Ingresar</a>
                     </div>
                 </article>
 
