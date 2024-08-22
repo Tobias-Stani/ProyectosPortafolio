@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reloj Binario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+            color: rgb(96, 255, 5);
+        }
+        .clock {
+            display: flex;
+            gap: 20px;
+            text-align: center;
+        }
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .bits {
+            display: flex;
+        }
+        .bit {
+            font-size: 1.5em;
+            margin: 0 2px;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 1;
+        }
+        .bit.fade-out {
+            opacity: 0;
+        }
+        .decimal {
+            margin-top: 10px;
+            font-size: 1.2em;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 1;
+        }
+        .decimal.fade-out {
+            opacity: 0;
+        }
+        .separator {
+            font-size: 2em;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock" id="binaryClock">
+        <!-- Se generarán elementos aquí -->
+    </div>
+    <script src="clock.js"></script>
+</body>
+</html>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const clockElement = document.getElementById('binaryClock');
+    
+        function createBitElement() {
+            const bit = document.createElement('div');
+            bit.className = 'bit';
+            bit.textContent = '0';
+            return bit;
+        }
+    
+        function createTimeUnitElement(label) {
+            const unit = document.createElement('div');
+            unit.className = 'time-unit';
+    
+            const unitLabel = document.createElement('div');
+            unitLabel.textContent = label;
+            unit.appendChild(unitLabel);
+    
+            const bitsContainer = document.createElement('div');
+            bitsContainer.className = 'bits';
+            for (let i = 0; i < 6; i++) {
+                bitsContainer.appendChild(createBitElement());
+            }
+            unit.appendChild(bitsContainer);
+    
+            const decimalDisplay = document.createElement('div');
+            decimalDisplay.className = 'decimal';
+            decimalDisplay.textContent = '0';
+            unit.appendChild(decimalDisplay);
+    
+            return unit;
+        }
+    
+        function createSeparatorElement() {
+            const separator = document.createElement('div');
+            separator.className = 'separator';
+            separator.textContent = ':';
+            return separator;
+        }
+    
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString(2).padStart(6, '0');
+            const minutes = now.getMinutes().toString(2).padStart(6, '0');
+            const seconds = now.getSeconds().toString(2).padStart(6, '0');
+    
+            const timeUnits = [
+                { binary: hours, decimal: now.getHours() },
+                { binary: minutes, decimal: now.getMinutes() },
+                { binary: seconds, decimal: now.getSeconds() }
+            ];
+    
+            timeUnits.forEach((timeUnit, index) => {
+                const unitElement = clockElement.children[index * 2];
+                const bitsContainer = unitElement.querySelector('.bits');
+                const decimalDisplay = unitElement.querySelector('.decimal');
+    
+                // Agregar animación a los bits
+                for (let i = 0; i < timeUnit.binary.length; i++) {
+                    const bit = bitsContainer.children[i];
+                    if (bit.textContent !== timeUnit.binary[i]) {
+                        bit.classList.add('fade-out');
+                        setTimeout(() => {
+                            bit.textContent = timeUnit.binary[i];
+                            bit.classList.remove('fade-out');
+                        }, 500);
+                    }
+                }
+    
+                // Agregar animación al valor decimal
+                if (decimalDisplay.textContent != timeUnit.decimal) {
+                    decimalDisplay.classList.add('fade-out');
+                    setTimeout(() => {
+                        decimalDisplay.textContent = timeUnit.decimal;
+                        decimalDisplay.classList.remove('fade-out');
+                    }, 500);
+                }
+            });
+        }
+    
+        // Crear elementos de horas, minutos y segundos con separadores
+        const labels = ['Horas', 'Minutos', 'Segundos'];
+        labels.forEach((label, index) => {
+            clockElement.appendChild(createTimeUnitElement(label));
+            if (index < labels.length - 1) {
+                clockElement.appendChild(createSeparatorElement());
+            }
+        });
+    
+        // Actualizar el reloj cada segundo
+        setInterval(updateClock, 1000);
+        updateClock();
+    });
+    
+        
+</script>
