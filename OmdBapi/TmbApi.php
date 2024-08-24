@@ -123,7 +123,7 @@ $randomEpisode = $client->getRandomEpisode('The Office');
             <h1><?php echo "Season " . $randomEpisode['season'] . " - Episode " . $randomEpisode['episode']; ?></h1>
             <h2><?php echo $randomEpisode['title']; ?></h2>
             <p><?php echo $randomEpisode['overview']; ?></p>
-            <button id="reload">Random Episode</button>
+            <button id="reload">Random Episode!</button>
         <?php else: ?>
             <p>No se pudo obtener un episodio aleatorio.</p>
         <?php endif; ?>
