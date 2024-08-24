@@ -253,7 +253,7 @@
             <ul class="timeline">
                 <li class="timeline-item">
                     <h3>Tercer Proyecto o Hito</h3>
-                    <p>Descripción breve del tercer proyecto o hito importante.</p>
+                    <p>Descripción brevedddd tercer proyecto o hito importante.</p>
                     <time datetime="2022-09">Septiembre 2022</time>
                 </li>
                 <li class="timeline-item">
