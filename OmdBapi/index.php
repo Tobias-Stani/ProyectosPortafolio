@@ -12,16 +12,50 @@ class OMDBApiClient
 
     public function fetchMovieData(string $title): ?array
     {
-        $url = "http://www.omdbapi.com/?t=" . urlencode($title) . "&apikey=" . $this->apiKey;
+        $url = "https://www.omdbapi.com/?t=" . urlencode($title) . "&apikey=" . $this->apiKey;
+        return $this->fetchData($url);
+    }
+
+    public function fetchSeasonData(string $title, int $season): ?array
+    {
+        $url = "https://www.omdbapi.com/?t=" . urlencode($title) . "&Season=" . $season . "&apikey=" . $this->apiKey;
+        return $this->fetchData($url);
+    }
+
+    private function fetchData(string $url): ?array
+    {
         $result = file_get_contents($url);
         if ($result === false) {
             return null; // Manejar error apropiadamente
         }
         $data = json_decode($result, true);
-        if ($data === null) {
+        return $data === null ? null : $data;
+    }
+
+    public function getRandomEpisode(string $title): ?array
+    {
+        $seasonData = $this->fetchSeasonData($title, 1);
+        if ($seasonData === null || !isset($seasonData['totalSeasons'])) {
             return null; // Manejar error apropiadamente
         }
-        return $data;
+
+        $randomSeason = rand(1, (int) $seasonData['totalSeasons']);
+        $seasonData = $this->fetchSeasonData($title, $randomSeason);
+
+        if ($seasonData === null || !isset($seasonData['Episodes'])) {
+            return null; // Manejar error apropiadamente
+        }
+
+        $randomEpisodeIndex = rand(0, count($seasonData['Episodes']) - 1);
+        $randomEpisode = $seasonData['Episodes'][$randomEpisodeIndex];
+
+        return [
+            'season' => $randomSeason,
+            'episode' => $randomEpisode['Episode'],
+            'title' => $randomEpisode['Title'],
+            'released' => $randomEpisode['Released'],
+            'imdbRating' => $randomEpisode['imdbRating'],
+        ];
     }
 }
 
@@ -30,23 +64,23 @@ class Movie
 {
     private string $title;
     private string $year;
-    private string $poster;
-    private string $plot;
-    private string $actors;
-    private string $genre;
-    private string $rating;
     private string $director;
+    private string $genre;
+    private string $actors;
+    private string $plot;
+    private string $poster;
+    private string $rating;
 
     public function __construct(array $data)
     {
-        $this->title = $data['Title'];
-        $this->year = $data['Year'];
-        $this->poster = $data['Poster'];
-        $this->plot = $data['Plot'];
-        $this->actors = $data['Actors'];
-        $this->genre = $data['Genre'];
-        $this->rating = $data['imdbRating'];
-        $this->director = $data['Director'];
+        $this->title = $data['Title'] ?? '';
+        $this->year = $data['Year'] ?? '';
+        $this->director = $data['Director'] ?? '';
+        $this->genre = $data['Genre'] ?? '';
+        $this->actors = $data['Actors'] ?? '';
+        $this->plot = $data['Plot'] ?? '';
+        $this->poster = $data['Poster'] ?? '';
+        $this->rating = $data['imdbRating'] ?? '';
     }
 
     public function getTitle(): string
@@ -59,19 +93,9 @@ class Movie
         return $this->year;
     }
 
-    public function getPoster(): string
+    public function getDirector(): string
     {
-        return $this->poster;
-    }
-
-    public function getPlot(): string
-    {
-        return $this->plot;
-    }
-
-    public function getActors(): string
-    {
-        return $this->actors;
+        return $this->director;
     }
 
     public function getGenre(): string
@@ -79,14 +103,24 @@ class Movie
         return $this->genre;
     }
 
+    public function getActors(): string
+    {
+        return $this->actors;
+    }
+
+    public function getPlot(): string
+    {
+        return $this->plot;
+    }
+
+    public function getPoster(): string
+    {
+        return $this->poster;
+    }
+
     public function getRating(): string
     {
         return $this->rating;
-    }
-
-    public function getDirector(): string
-    {
-        return $this->director;
     }
 }
 
@@ -94,6 +128,7 @@ class Movie
 $apiKey = "f551eb65";
 $client = new OMDBApiClient($apiKey);
 $movie = null;
+$episode = null;
 $errorMessage = null;
 
 if (isset($_GET['title'])) {
@@ -102,6 +137,9 @@ if (isset($_GET['title'])) {
         $data = $client->fetchMovieData($title);
         if ($data && $data['Response'] === "True") {
             $movie = new Movie($data);
+            if (strtolower($data['Type']) === 'series') {
+                $episode = $client->getRandomEpisode($title);
+            }
         } else {
             $errorMessage = "No se encontraron datos para la película o serie \"$title\".";
         }
@@ -152,12 +190,15 @@ if (isset($_GET['title'])) {
             font-weight: bold;
             color: #f39c12;
         }
+        .episode-details {
+            margin-top: 2rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <form method="get" class="search-form">
-            <h4 for="title">Ingrese el título de la película o serie:</h4>
+            <h4 for="title">Ingrese el título de la serie:</h4>
             <input type="text" id="title" name="title" required>
             <button type="submit">Buscar</button>
         </form>
@@ -174,7 +215,16 @@ if (isset($_GET['title'])) {
                 <p><strong>Sinopsis:</strong> <?= htmlspecialchars($movie->getPlot()) ?></p>
                 <p class='rating'><strong>IMDB Rating:</strong> <?= htmlspecialchars($movie->getRating()) ?></p>
             </div>
-            <div class='clear'></div>
+            <?php if ($episode): ?>
+                <div class='episode-details'>
+                    <h2>Episodio Aleatorio:</h2>
+                    <p><strong>Título:</strong> <?= htmlspecialchars($episode['title']) ?></p>
+                    <p><strong>Temporada:</strong> <?= htmlspecialchars($episode['season']) ?></p>
+                    <p><strong>Episodio:</strong> <?= htmlspecialchars($episode['episode']) ?></p>
+                    <p><strong>Fecha de emisión:</strong> <?= htmlspecialchars($episode['released']) ?></p>
+                    <p class='rating'><strong>IMDB Rating:</strong> <?= htmlspecialchars($episode['imdbRating']) ?></p>
+                </div>
+            <?php endif; ?>
         <?php elseif ($errorMessage): ?>
             <p><?= htmlspecialchars($errorMessage) ?></p>
         <?php endif; ?>

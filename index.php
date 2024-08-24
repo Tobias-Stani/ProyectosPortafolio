@@ -223,6 +223,26 @@
                         <a href="/libraries/barcode-1.1.1/index.php" class="btn">Ingresar</a>
                     </div>
                 </article>
+
+                <!-- Card 6 -->
+                <article class="card">
+                    <img src="ruta/a/imagen-proyecto4.jpg" class="card-img-top" alt="Proyecto 5">
+                    <div class="card-body">
+                        <h5 class="card-title">Random Episode the office</h5>
+                        <p class="card-text">Una breve descripción de este proyecto. Explica brevemente qué hace y por qué es interesante.</p>
+                        <a href="/OmdBapi/TmbApi.php" class="btn">Ingresar</a>
+                    </div>
+                </article>
+
+                <!-- Card 6 -->
+                <article class="card">
+                    <img src="ruta/a/imagen-proyecto4.jpg" class="card-img-top" alt="Proyecto 5">
+                    <div class="card-body">
+                        <h5 class="card-title">Reloj Binario</h5>
+                        <p class="card-text">Una breve descripción de este proyecto. Explica brevemente qué hace y por qué es interesante.</p>
+                        <a href="/relojBinary/index.html" class="btn">Ingresar</a>
+                    </div>
+                </article>
             </div>
 
             <!-- Timeline -->
